@@ -47,7 +47,7 @@ class _QuestScreenState extends State<QuestScreen> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    'Promotions',
+                    'Submit',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
