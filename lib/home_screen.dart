@@ -1,3 +1,4 @@
+import 'package:chc_design/cat_shop_screen.dart';
 import 'package:chc_design/mycat_screen.dart';
 import 'package:chc_design/service/service_firestoreage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -101,15 +102,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: FutureBuilder<DocumentSnapshot>(
                   future: Servicefstore.getUser(user.uid),
                   builder: (ctx, value) {
-                    if(value.hasData){
+                    if (value.hasData) {
                       return Text(
-                      value.data.data()['username'],
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    );
+                        value.data.data()['username'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      );
                     }
                     return Text(
                       "username",
@@ -123,12 +124,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               ListTile(
-                onTap: (){
+                onTap: () {
                   Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (contex) => Mycatscreeb(),
-                                ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (contex) => Mycatscreeb(),
+                      ));
                 },
                 leading: Icon(
                   Icons.favorite,
@@ -143,6 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               ListTile(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CatShopScreen()));
+                },
                 leading: Icon(
                   Icons.food_bank,
                   color: Colors.black,
