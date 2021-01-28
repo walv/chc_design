@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ConfirmShopScreen extends StatefulWidget {
+  String linkShopee;
+
+  ConfirmShopScreen({this.linkShopee});
   @override
   _ConfirmShopScreenState createState() => _ConfirmShopScreenState();
 }
@@ -23,8 +26,7 @@ class _ConfirmShopScreenState extends State<ConfirmShopScreen> {
         child: Builder(
           builder: (context) {
             return WebView(
-              initialUrl:
-                  'https://shopee.co.id/realme-Watch-S-Pro-AMOLED-Screen-GPS-5ATM-Water-Resistant--i.109598751.6975299725',
+              initialUrl: widget.linkShopee,
               javascriptMode: JavascriptMode.unrestricted,
             );
           },

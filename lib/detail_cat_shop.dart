@@ -1,5 +1,6 @@
 import 'package:chc_design/cat_shop_screen.dart';
 import 'package:chc_design/confirm_shop_screen.dart';
+import 'package:chc_design/model/cat_shop_model.dart';
 import 'package:flutter/material.dart';
 
 class DetailCatShop extends StatefulWidget {
@@ -121,7 +122,7 @@ class _DetailCatShopState extends State<DetailCatShop> {
                     top: 10,
                   ),
                   child: Text(
-                    "wiskas adalah makanan kuding",
+                    "${widget.catShopModel.desc}",
                     style: TextStyle(),
                   ),
                 ),
@@ -139,7 +140,8 @@ class _DetailCatShopState extends State<DetailCatShop> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ConfirmShopScreen()));
+                          builder: (context) => ConfirmShopScreen(
+                              linkShopee: widget.catShopModel.linkShopee)));
                 },
               ),
             )
