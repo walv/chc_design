@@ -124,7 +124,6 @@ class _CatShopScreenState extends State<CatShopScreen> {
                       child: Row(
                         children: [
                           ...List.generate(5, (id) {
-                            print(id.toString());
                             return Icon(
                               Icons.star,
                               size: 15,

@@ -1,4 +1,5 @@
 import 'package:chc_design/cat_shop_screen.dart';
+import 'package:chc_design/confirm_shop_screen.dart';
 import 'package:flutter/material.dart';
 
 class DetailCatShop extends StatefulWidget {
@@ -75,7 +76,6 @@ class _DetailCatShopState extends State<DetailCatShop> {
                   child: Row(
                     children: [
                       ...List.generate(5, (id) {
-                        print(id.toString());
                         return Icon(
                           Icons.star,
                           size: 15,
@@ -135,7 +135,12 @@ class _DetailCatShopState extends State<DetailCatShop> {
                   "Pesan",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ConfirmShopScreen()));
+                },
               ),
             )
           ],
