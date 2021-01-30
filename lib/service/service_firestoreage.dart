@@ -13,4 +13,21 @@ class Servicefstore {
   static Future<DocumentSnapshot> getUser(String id) async {
     return await user.doc(id).get();
   }
+  
+  static Stream<QuerySnapshot> getMycat(String id)  {
+    return  user.doc(id).collection('mycat').snapshots();
+  
+  }
+
+  static Future<void> addMycat({String id, String nama, String gambar, String jenis, String kelamin , int umur , int beratbadan}){
+    return user.doc(id).collection('mycat').doc().set({
+      "nama" : nama,
+      "gambar" : gambar,
+      "jenis " : jenis,
+      "kelamin" : kelamin,
+      "umur" : umur,
+      "berat_badan" : beratbadan,
+      
+    });
+  }
 }

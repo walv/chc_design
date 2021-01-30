@@ -1,11 +1,14 @@
 import 'package:chc_design/cat_shop_screen.dart';
+import 'package:chc_design/detail_berita.dart';
 import 'package:chc_design/mycat_screen.dart';
+import 'package:chc_design/service/service_berita.dart';
 import 'package:chc_design/service/service_firestoreage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:chc_design/thread.dart';
 import 'package:provider/provider.dart';
+
+import 'model/berita_model.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,53 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   User user;
   var _scaffoldKey = GlobalKey<ScaffoldState>();
-  var listThread = [
-    CHCToday(
-      threadStarter: 'iskrim',
-      subForum: 'Healthy Cat',
-      judulThread: 'Obat-Obatan Alami yang Ampuh untuk Kucing Diare',
-      view: 666,
-      comment: 20,
-      imageUrl:
-          'https://infobinatang.com/wp-content/uploads/2019/08/cropped-keracunan-pada-kucing.jpg',
-    ),
-    CHCToday(
-      threadStarter: 'iskrim',
-      subForum: 'Accessoris ',
-      judulThread: 'Jenis-Jenis Kalung Kucing',
-      view: 70,
-      comment: 200,
-      imageUrl:
-          'https://infobinatang.com/wp-content/uploads/2019/08/cropped-keracunan-pada-kucing.jpg',
-    ),
-    CHCToday(
-      threadStarter: 'iskrim',
-      subForum: 'Healthy Cat',
-      judulThread: 'Steril Mengancam Kucing Kita?',
-      view: 666,
-      comment: 20,
-      imageUrl:
-          'https://infobinatang.com/wp-content/uploads/2019/08/cropped-keracunan-pada-kucing.jpg',
-    ),
-    CHCToday(
-      threadStarter: 'iskrim',
-      subForum: 'Tips and Trick Care Cat',
-      judulThread: 'Tips untuk Kucing yang Bandel Di Rumah',
-      view: 666,
-      comment: 20,
-      imageUrl:
-          'https://infobinatang.com/wp-content/uploads/2019/08/cropped-keracunan-pada-kucing.jpg',
-    ),
-    CHCToday(
-      threadStarter: 'iskrim',
-      subForum: 'Accessoris',
-      judulThread: 'Baju-Baju untuk Kucing',
-      view: 666,
-      comment: 20,
-      imageUrl:
-          'https://infobinatang.com/wp-content/uploads/2019/08/cropped-keracunan-pada-kucing.jpg',
-    ),
-  ];
+ 
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
@@ -177,65 +134,81 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: listThread.length,
-        itemBuilder: (context, index) {
-          return Container(
-            color: Colors.white,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(bottom: 10),
-            height: 400,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 20,
-                  child: Row(
+      body: FutureBuilder<List<Beritamodel>>(
+        future: Serviceberita.getberita(),
+        builder: (context, snapshot) {
+          if(
+            snapshot.connectionState==ConnectionState.waiting
+          
+          ){
+            return Center(child: CircularProgressIndicator(),);
+
+          }
+          var listThread = snapshot.data;
+          return ListView.builder(
+            itemCount: listThread.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>Detailberitascreen(beritamodel: listThread[index],)));
+
+                },
+                              child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.only(bottom: 10),
+                  height: 400,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(listThread[index].threadStarter,
-                          style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(width: 10),
-                      Text(listThread[index].subForum,
-                          style: TextStyle(
-                            color: Colors.grey[300],
-                            fontSize: 15,
-                          )),
+                      Container(
+                        height: 20,
+                        child: Row(
+                          children: [
+                            Text("Kategori",
+                                style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(width: 10),
+                            Text(listThread[index].kategori,
+                                style: TextStyle(
+                                  color: Colors.grey[300],
+                                  fontSize: 15,
+                                )),
+                          ],
+                        ),
+                      ),
+                      Divider(),
+                      Container(
+                        height: 30,
+                        child: Text(listThread[index].judul,
+                            style:
+                                TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                      ),
+                      Container(
+                        height: 280,
+                        child: Image(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(listThread[index].image),
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        child: Row(
+                          children: [
+                            Icon(Icons.message),
+                            Text(listThread[index].comment.length.toString()),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                Divider(),
-                Container(
-                  height: 30,
-                  child: Text(listThread[index].judulThread,
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  height: 280,
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(listThread[index].imageUrl),
-                  ),
-                ),
-                Container(
-                  height: 30,
-                  child: Row(
-                    children: [
-                      Icon(Icons.remove_red_eye),
-                      Text(listThread[index].view.toString()),
-                      SizedBox(width: 10),
-                      Icon(Icons.message),
-                      Text(listThread[index].comment.toString()),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           );
-        },
+        }
       ),
     );
   }

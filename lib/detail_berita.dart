@@ -1,18 +1,19 @@
-import 'package:chc_design/cat_shop_screen.dart';
-import 'package:chc_design/confirm_shop_screen.dart';
-import 'package:chc_design/model/cat_shop_model.dart';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class DetailCatShop extends StatefulWidget {
-  final CatShopModel catShopModel;
+import 'model/berita_model.dart';
 
-  const DetailCatShop({Key key, this.catShopModel}) : super(key: key);
+class Detailberitascreen extends StatefulWidget {
+  final Beritamodel beritamodel;
+
+  const Detailberitascreen({Key key, this.beritamodel}) : super(key: key);
 
   @override
-  _DetailCatShopState createState() => _DetailCatShopState();
+  _DetailberitascreenState createState() => _DetailberitascreenState();
 }
 
-class _DetailCatShopState extends State<DetailCatShop> {
+class _DetailberitascreenState extends State<Detailberitascreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +26,7 @@ class _DetailCatShopState extends State<DetailCatShop> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          "Cat Shop Detail",
+          "Berita Tentang Kucing",
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
@@ -50,7 +51,7 @@ class _DetailCatShopState extends State<DetailCatShop> {
                     image: DecorationImage(
                       fit: BoxFit.fill,
                       image: NetworkImage(
-                        widget.catShopModel.image,
+                        widget.beritamodel.image,
                       ),
                     ),
                   ),
@@ -61,32 +62,14 @@ class _DetailCatShopState extends State<DetailCatShop> {
                     top: 10,
                   ),
                   child: Text(
-                    widget.catShopModel.namaBarang,
+                    widget.beritamodel.judul,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 7,
-                    top: 10,
-                  ),
-                  child: Row(
-                    children: [
-                      ...List.generate(5, (id) {
-                        return Icon(
-                          Icons.star,
-                          size: 15,
-                          color: (id < widget.catShopModel.rating)
-                              ? Colors.yellow
-                              : Colors.grey,
-                        );
-                      }),
-                    ],
-                  ),
-                ),
+                
                 Padding(
                   padding: const EdgeInsets.only(
                     left: 7,
@@ -94,7 +77,8 @@ class _DetailCatShopState extends State<DetailCatShop> {
                     bottom: 10,
                   ),
                   child: Text(
-                    "Rp. ${widget.catShopModel.harga}",
+                    DateFormat.yMMMMEEEEd()
+                                    .format(widget.beritamodel.date),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -121,29 +105,44 @@ class _DetailCatShopState extends State<DetailCatShop> {
                     top: 10,
                   ),
                   child: Text(
-                    "${widget.catShopModel.desc}",
+                    "${widget.beritamodel.deskripsi}",
                     style: TextStyle(),
                   ),
                 ),
               ],
             ),
-            Container(
-              width: MediaQuery.of(context).size.width - 40,
-              child: RaisedButton(
-                color: Colors.blue,
-                child: Text(
-                  "Pesan",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ConfirmShopScreen(
-                              linkShopee: widget.catShopModel.linkShopee)));
-                },
-              ),
-            )
+Divider(),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: widget.beritamodel.comment.length,
+                          separatorBuilder: (context, index) => Divider(),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.beritamodel.comment[index]['username'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(vertical: 10),
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      widget.beritamodel.comment[index]['comment'],
+                                      maxLines: 5,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),            
           ],
         ),
       ),
