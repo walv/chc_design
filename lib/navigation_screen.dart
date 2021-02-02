@@ -15,7 +15,6 @@ class _NavScreenState extends State<NavScreen> {
     HomeScreen(),
     ListquestScreen(),
     QuestScreen(),
-    NotifScreen(),
     ProfileScreen(),
   ];
   var selectedIndex = 0;
@@ -47,10 +46,6 @@ class _NavScreenState extends State<NavScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),
             label: 'Threa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_none),
-            label: 'Notif',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),

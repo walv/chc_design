@@ -9,6 +9,14 @@ class Servicefstore {
       "email": email,
     });
   }
+  static Future<void> updateProfile(String id, String nama, String deskripsi, String profile) async {
+    await user.doc(id).set({
+      "profile": profile,
+      "nama": nama,
+      "deskripsi" : deskripsi,
+
+    }, SetOptions(merge: true));
+  }
 
   static Future<DocumentSnapshot> getUser(String id) async {
     return await user.doc(id).get();
@@ -18,7 +26,21 @@ class Servicefstore {
     return  user.doc(id).collection('mycat').snapshots();
   
   }
+  static Future<DocumentSnapshot> getKucing(String uid, String id) async {
+    return await user.doc(uid).collection('mycat').doc(id).get();
+  }
 
+static Future<void> editCat({String uid, String id,String nama, String gambar, String jenis, String kelamin , int umur , int beratbadan}){
+    return user.doc(uid).collection('mycat').doc(id).set({
+      "nama" : nama,
+      "gambar" : gambar,
+      "jenis " : jenis,
+      "kelamin" : kelamin,
+      "umur" : umur,
+      "berat_badan" : beratbadan,
+      
+    });
+  }
   static Future<void> addMycat({String id, String nama, String gambar, String jenis, String kelamin , int umur , int beratbadan}){
     return user.doc(id).collection('mycat').doc().set({
       "nama" : nama,

@@ -12,19 +12,15 @@ class Mycatscreeb extends StatefulWidget {
 }
 
 class _MycatscreebState extends State<Mycatscreeb> {
-  
-    User user;
+  User user;
 
   @override
   Widget build(BuildContext context) {
-     user= Provider.of<User>(context);
-     return Scaffold(
+    user = Provider.of<User>(context);
+    return Scaffold(
       appBar: AppBar(
-        actions: [
-          
-        ],
+        actions: [],
         backgroundColor: Colors.grey[350],
-        
         title: Text(
           'Your Id',
           style: TextStyle(color: Colors.black),
@@ -34,90 +30,81 @@ class _MycatscreebState extends State<Mycatscreeb> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FutureBuilder<DocumentSnapshot>(
-        future: Servicefstore.getUser(user.uid),
-        builder: (context, snapshot) {
-          if(
-            snapshot.connectionState==ConnectionState.waiting
-          
-          ){
-            return Center(child: CircularProgressIndicator(),);
-
-          }
-          return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Sayangi Dirimu Seperti Kamu Menyayangi Kucingmu',
-              style: TextStyle(color: Colors.orange[700]),
-            ),
-          ),
-                ),
-                Divider(),
-                Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey[300],
-                ),
-                // child: photo != null
-                //     ? Container(
-                //         width: 100,
-                //         height: 100,
-                //         decoration: BoxDecoration(
-                //           shape: BoxShape.circle,
-                //           image: DecorationImage(
-                //             fit: BoxFit.fill,
-                //             image: NetworkImage(
-                //               photo,
-                //             ),
-                //           ),
-                //         ),
-                //       )
-                //     : 
-                child: Icon(
-                        Icons.person,
-                        size: 80,
-                        color: Colors.grey[400],
+              future: Servicefstore.getUser(user.uid),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Sayangi Dirimu Seperti Kamu Menyayangi Kucingmu',
+                          style: TextStyle(color: Colors.orange[700]),
+                        ),
                       ),
-              ),
-                            ],
-          ),
-                ),
-                Padding(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: Text(
-              snapshot.data.data()["username"],
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )),
-                Padding(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: Text(snapshot.data.data()["email"]),
-                ),
-               
-              ],
-            );
-        }
-      ),
-          StreamBuilder<QuerySnapshot>(
-            stream: Servicefstore.getMycat(user.uid),
-            builder: (context, snapshot) {
-              if(snapshot.connectionState==ConnectionState.waiting){
-                return Center(
-                  child: CircularProgressIndicator(),
+                    ),
+                    Divider(),
+                    
+                         Container(
+                          height: 100,
+                          width: 100,
+                          margin: EdgeInsets.only(top: 40),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey[300],
+                          ),
+                           child: snapshot.data.data()["profile"] != null
+                              ? Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        snapshot.data.data()["profile"],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              :
+                          Icon(
+                            Icons.person,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                          
+                   
+                    Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                        child: Text(
+                          snapshot.data.data()["username"],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                      child: Text(snapshot.data.data()["email"]),
+                    ),
+                  ],
                 );
-
-              }
-              return Container(
+              }),
+          StreamBuilder<QuerySnapshot>(
+              stream: Servicefstore.getMycat(user.uid),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Container(
                   height: 100,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -125,10 +112,13 @@ class _MycatscreebState extends State<Mycatscreeb> {
                     itemBuilder: (context, index) {
                       return index == 0
                           ? GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Addcatscreen()));
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Addcatscreen()));
                               },
-                                                  child: Column(
+                              child: Column(
                                 children: [
                                   Container(
                                     height: 70,
@@ -144,37 +134,61 @@ class _MycatscreebState extends State<Mycatscreeb> {
                                   Text('Tambahkan Kucing'),
                                 ],
                               ),
-                          )
+                            )
                           : GestureDetector(
-                            onTap: (){
-                         Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (contex) => Detailkucing(),
-                                    ));   
-                            },
-                                                  child: Column(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (contex) => Detailkucing(id:snapshot.data.docs[index - 1].id),
+                                    ));
+                              },
+                              child: Column(
                                 children: [
                                   Container(
-                                    height: 70,
-                                    width: 70,
-                                    margin: EdgeInsets.symmetric(horizontal: 5),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.grey[200],
-                                    ),
-                                    child: Icon(Icons.person),
-                                  ),
+                                      height: 70,
+                                      width: 70,
+                                      margin: EdgeInsets.only(right: 10 ),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.grey[300],
+                                      ),
+                                      child: snapshot.data.docs[index - 1]
+                                                      .data()['gambar'] ==
+                                                  null ||
+                                              snapshot.data.docs[index - 1]
+                                                      .data()['gambar'] ==
+                                                  ''
+                                          ? Icon(
+                                              Icons.person,
+                                              size: 40,
+                                              color: Colors.grey[400],
+                                            )
+                                          : Container(
+                                              width: 70,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: NetworkImage(
+                                                    snapshot
+                                                        .data.docs[index - 1]
+                                                        .data()['gambar'],
+                                                  ),
+                                                ),
+                                              ),
+                                            )),
                                   SizedBox(height: 5),
-                                  Text(snapshot.data.docs[index - 1].data()['nama']),
+                                  Text(snapshot.data.docs[index - 1]
+                                      .data()['nama']),
                                 ],
                               ),
-                          );
+                            );
                     },
                   ),
                 );
-            }
-          ),
+              }),
         ],
       ),
     );

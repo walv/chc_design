@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   User user;
   var _scaffoldKey = GlobalKey<ScaffoldState>();
- 
+
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
@@ -44,42 +44,59 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.all(20),
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.person),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: FutureBuilder<DocumentSnapshot>(
+              FutureBuilder<DocumentSnapshot>(
                   future: Servicefstore.getUser(user.uid),
                   builder: (ctx, value) {
-                    if (value.hasData) {
-                      return Text(
-                        value.data.data()['username'],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 20,
+                    if (!value.hasData) {
+                      return Container(
+                        height: 190,
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                         Container(
+                          height: 100,
+                          width: 100,
+                          margin: EdgeInsets.only(top: 40),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey[300],
+                          ),
+                           child: value.data.data()["profile"] != null
+                              ? Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        value.data.data()["profile"],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              :
+                          Icon(
+                            Icons.person,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
                         ),
+                          Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                value.data.data()['username'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              )),
+                        ],
                       );
                     }
-                    return Text(
-                      "username",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  }),
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -135,81 +152,82 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: FutureBuilder<List<Beritamodel>>(
-        future: Serviceberita.getberita(),
-        builder: (context, snapshot) {
-          if(
-            snapshot.connectionState==ConnectionState.waiting
-          
-          ){
-            return Center(child: CircularProgressIndicator(),);
-
-          }
-          var listThread = snapshot.data;
-          return ListView.builder(
-            itemCount: listThread.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: (){
-                  Navigator.push(context,MaterialPageRoute(builder: (context)=>Detailberitascreen(beritamodel: listThread[index],)));
-
-                },
-                              child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.only(bottom: 10),
-                  height: 400,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 20,
-                        child: Row(
-                          children: [
-                            Text("Kategori",
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold)),
-                            SizedBox(width: 10),
-                            Text(listThread[index].kategori,
-                                style: TextStyle(
-                                  color: Colors.grey[300],
-                                  fontSize: 15,
-                                )),
-                          ],
-                        ),
-                      ),
-                      Divider(),
-                      Container(
-                        height: 30,
-                        child: Text(listThread[index].judul,
-                            style:
-                                TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                      ),
-                      Container(
-                        height: 280,
-                        child: Image(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(listThread[index].image),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        child: Row(
-                          children: [
-                            Icon(Icons.message),
-                            Text(listThread[index].comment.length.toString()),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+          future: Serviceberita.getberita(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
               );
-            },
-          );
-        }
-      ),
+            }
+            var listThread = snapshot.data;
+            return ListView.builder(
+              itemCount: listThread.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Detailberitascreen(
+                                  beritamodel: listThread[index],
+                                )));
+                  },
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.only(bottom: 10),
+                    height: 400,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 20,
+                          child: Row(
+                            children: [
+                              Text("Kategori",
+                                  style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(width: 10),
+                              Text(listThread[index].kategori,
+                                  style: TextStyle(
+                                    color: Colors.grey[300],
+                                    fontSize: 15,
+                                  )),
+                            ],
+                          ),
+                        ),
+                        Divider(),
+                        Container(
+                          height: 30,
+                          child: Text(listThread[index].judul,
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold)),
+                        ),
+                        Container(
+                          height: 280,
+                          child: Image(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(listThread[index].image),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          child: Row(
+                            children: [
+                              Icon(Icons.message),
+                              Text(listThread[index].comment.length.toString()),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
     );
   }
 }
