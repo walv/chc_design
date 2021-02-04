@@ -54,35 +54,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     } else {
                       return Column(
                         children: [
-                         Container(
-                          height: 100,
-                          width: 100,
-                          margin: EdgeInsets.only(top: 40),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey[300],
+                          Image(
+                            width: MediaQuery.of(context).size.width*0.8,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/Judulbase.png'),
                           ),
-                           child: value.data.data()["profile"] != null
-                              ? Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(
-                                        value.data.data()["profile"],
+                          Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[300],
+                            ),
+                            child: value.data.data()["profile"] != null
+                                ? Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                          value.data.data()["profile"],
+                                        ),
                                       ),
                                     ),
+                                  )
+                                : Icon(
+                                    Icons.person,
+                                    size: 80,
+                                    color: Colors.grey[400],
                                   ),
-                                )
-                              :
-                          Icon(
-                            Icons.person,
-                            size: 80,
-                            color: Colors.grey[400],
                           ),
-                        ),
                           Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text(

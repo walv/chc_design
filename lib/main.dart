@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
             title: Text('Care and Health Cat',
             style: TextStyle(fontWeight: FontWeight.bold), ),
             navigateAfterSeconds: Wrapper(), 
-            // image:  Image.asset('assets/cat_logo-bg.png'),
-            imageBackground: AssetImage('assets/cat_logo-bg.png'),
+            
+            imageBackground: AssetImage('assets/catsplashhome.png'),
             backgroundColor: Colors.white,
             photoSize: 200.0,
             loaderColor: Colors.blue,
