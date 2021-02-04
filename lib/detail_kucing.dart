@@ -1,9 +1,15 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:chc_design/service/service_firestoreage.dart';
 import 'package:chc_design/tambah_kucing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart';
 
 class Detailkucing extends StatefulWidget {
   final String id;
@@ -16,7 +22,9 @@ class Detailkucing extends StatefulWidget {
 
 class _DetailkucingState extends State<Detailkucing> {
   User user;
-
+  String id;
+  File image;
+  List<dynamic>list_gambar;
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
@@ -30,14 +38,16 @@ class _DetailkucingState extends State<Detailkucing> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-          future: Servicefstore.getKucing(user.uid, widget.id),
+      body: StreamBuilder<DocumentSnapshot>(
+          stream: Servicefstore.getKucing(user.uid, widget.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
+            list_gambar= snapshot.data.data()['list_gambar'];
+            id= snapshot.data.id;
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,30 +101,33 @@ class _DetailkucingState extends State<Detailkucing> {
                   ),
                   Padding(
                       padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                      child: Text(
-                        snapshot.data.data()['nama'],
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                      Padding(
+                      child: Text("Identitas Kucing ",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Padding(
                       padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                       child: Text(
-                        snapshot.data.data()['jenis '],
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        "Nama: ${snapshot.data.data()['nama']}",
                       )),
                   Padding(
                       padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                       child: Text(
-                        snapshot.data.data()['kelamin'],
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        "Jenis Kucing: ${snapshot.data.data()['jenis ']}",
                       )),
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                  //   child: Text('Umur ${snapshot.data.data()['umur']}'),
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                  //   child: Text('Berat ${snapshot.data.data()['berat_badan']}'),
-                  // ),
+                  Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                      child: Text(
+                        "Jenis KElamin Kucing : ${snapshot.data.data()['kelamin']}",
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child:
+                        Text('Umur Kucing : ${snapshot.data.data()['umur']}'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: Text(
+                        'Berat Badan kucing : ${snapshot.data.data()['berat_badan']}'),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -134,28 +147,137 @@ class _DetailkucingState extends State<Detailkucing> {
                           ),
                           onPressed: () async {
                             await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Addcatscreen(id:widget.id,
-                                        gambar:snapshot.data.data()['gambar'],
-                                        nama:snapshot.data.data()['nama'],
-                                        jenis :snapshot.data.data()['jenis '],
-                                        kelamin:snapshot.data.data()['kelamin'],
-                                        umur:snapshot.data.data()['umur'].toString(),
-                                        berat_badan:snapshot.data.data()['berat_badan'].toString(),
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Addcatscreen(
+                                          id: widget.id,
+                                          gambar:
+                                              snapshot.data.data()['gambar'],
+                                          nama: snapshot.data.data()['nama'],
+                                          jenis: snapshot.data.data()['jenis '],
+                                          kelamin:
+                                              snapshot.data.data()['kelamin'],
+                                          umur: snapshot.data
+                                              .data()['umur']
+                                              .toString(),
+                                          berat_badan: snapshot.data
+                                              .data()['berat_badan']
+                                              .toString(),
                                         )));
-                                        setState(() {
-                                          
-                                        });
+                            setState(() {});
                           },
                         ),
                       ),
                     ],
                   ),
+                  Wrap(
+                    runSpacing: 10,
+                    spacing: 10,
+                    children: [
+                      ...List.generate(
+                        (snapshot.data.data()['list_gambar'] as List).length,
+                        (index) => Container(
+                          height: (MediaQuery.of(context).size.width - 30) / 3,
+                          width: (MediaQuery.of(context).size.width - 30) / 3,
+                          decoration: BoxDecoration(
+                            color: Colors.orange,
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                snapshot.data.data()['list_gambar'][index],
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             );
           }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await choiceImage(context);
+
+          String filename;
+          String downloadurl;
+          if (image != null) {
+            filename = basename(image.path);
+            downloadurl = await FirebaseStorage.instance
+                .ref()
+                .child(filename)
+                .putFile(image)
+                .whenComplete(() {})
+                .then(
+              (task) async {
+                return await task.ref.getDownloadURL();
+              },
+            );
+            image = null;
+            list_gambar.add(downloadurl);
+            await Servicefstore.addImageCat(
+              uid: user.uid,
+              id: id,
+              list_gambar: list_gambar,
+            );
+
+          }
+        },
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  imgFromCamera() async {
+    var res = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 50);
+    if (res != null) {
+      File file = File(res.path);
+      setState(() {
+        image = file;
+      });
+    }
+  }
+
+  imgFromGallery() async {
+    var res = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 50);
+    if (res != null) {
+      File file = File(res.path);
+      setState(() {
+        image = file;
+      });
+    }
+  }
+
+  Future<void> choiceImage(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

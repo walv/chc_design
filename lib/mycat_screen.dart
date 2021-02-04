@@ -67,7 +67,7 @@ class _MycatscreebState extends State<Mycatscreeb> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.fill, 
                                       image: NetworkImage(
                                         snapshot.data.data()["profile"],
                                       ),

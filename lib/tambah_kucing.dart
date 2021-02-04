@@ -137,7 +137,7 @@ class _AddcatscreenState extends State<Addcatscreen> {
               child: TextField(
                 controller: namaC,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(hintText: 'Nama'),
+                decoration: InputDecoration(labelText: "Nama Kucing",hintText: 'Nama'),
               ),
             ),
             Padding(
@@ -145,7 +145,7 @@ class _AddcatscreenState extends State<Addcatscreen> {
               child: TextField(
                 controller: jenisC,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(hintText: 'Jenis'),
+                decoration: InputDecoration(labelText: "Jenis Kucing",hintText: 'Jenis'),
               ),
             ),
             Padding(
@@ -153,7 +153,7 @@ class _AddcatscreenState extends State<Addcatscreen> {
               child: TextField(
                 controller: kelaminC,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(hintText: 'Kelamin'),
+                decoration: InputDecoration(labelText:"Jenis Kelamin Kucing",hintText: 'Kelamin'),
               ),
             ),
             Padding(
@@ -161,7 +161,7 @@ class _AddcatscreenState extends State<Addcatscreen> {
               child: TextField(
                 controller: umurC,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(hintText: 'Umur'),
+                decoration: InputDecoration(labelText: "Umur Kucing",hintText: 'Umur'),
               ),
             ),
             Padding(
@@ -169,7 +169,7 @@ class _AddcatscreenState extends State<Addcatscreen> {
               child: TextField(
                 controller: beratbadanC,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(hintText: 'Berat badan'),
+                decoration: InputDecoration(labelText: "Berat Badan Kucing",hintText: 'Berat badan'),
               ),
             ),
             SizedBox(

@@ -23,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [],
         backgroundColor: Colors.grey[350],
         title: Text(
-          'Your Id',
+          'Akun',
           style: TextStyle(
             color: Colors.black,
           ),
