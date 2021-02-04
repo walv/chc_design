@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:full_screen_image/full_screen_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart';
@@ -24,7 +25,7 @@ class _DetailkucingState extends State<Detailkucing> {
   User user;
   String id;
   File image;
-  List<dynamic>list_gambar;
+  List<dynamic> list_gambar;
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
@@ -46,8 +47,8 @@ class _DetailkucingState extends State<Detailkucing> {
                 child: CircularProgressIndicator(),
               );
             }
-            list_gambar= snapshot.data.data()['list_gambar'];
-            id= snapshot.data.id;
+            list_gambar = snapshot.data.data()['list_gambar'];
+            id = snapshot.data.id;
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,15 +177,18 @@ class _DetailkucingState extends State<Detailkucing> {
                     children: [
                       ...List.generate(
                         (snapshot.data.data()['list_gambar'] as List).length,
-                        (index) => Container(
-                          height: (MediaQuery.of(context).size.width - 30) / 3,
-                          width: (MediaQuery.of(context).size.width - 30) / 3,
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(
-                                snapshot.data.data()['list_gambar'][index],
+                        (index) => FullScreenWidget(
+                          child: Container(
+                            height:
+                                (MediaQuery.of(context).size.width - 30) / 3,
+                            width: (MediaQuery.of(context).size.width - 30) / 3,
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                  snapshot.data.data()['list_gambar'][index],
+                                ),
                               ),
                             ),
                           ),
@@ -221,7 +225,6 @@ class _DetailkucingState extends State<Detailkucing> {
               id: id,
               list_gambar: list_gambar,
             );
-
           }
         },
         child: Icon(Icons.add),

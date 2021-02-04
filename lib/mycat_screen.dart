@@ -22,7 +22,7 @@ class _MycatscreebState extends State<Mycatscreeb> {
         actions: [],
         backgroundColor: Colors.grey[350],
         title: Text(
-          'Your Id',
+          'My Cat',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -96,6 +96,9 @@ class _MycatscreebState extends State<Mycatscreeb> {
                   ],
                 );
               }),
+            SizedBox(
+              height: 10,
+            ),
           StreamBuilder<QuerySnapshot>(
               stream: Servicefstore.getMycat(user.uid),
               builder: (context, snapshot) {

@@ -202,7 +202,7 @@ class _EditState extends State<Edit> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  'Provide your personal information, even if the accounts is for bussines, a pet or something else. This will not be a part of your public profile ',
+                  'Provide your personal information.This will not be a part of your public profile ',
                   style: TextStyle(
                     fontSize: 10,
                   ),

@@ -135,23 +135,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            'Promotions',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
-                      Container(
-                        width: 110,
-                        child: OutlineButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
                             'Sign Out',
                             style: TextStyle(
                               color: Colors.black,
