@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:chc_design/mycat_screen.dart';
 import 'package:chc_design/service/service_firestoreage.dart';
 import 'package:chc_design/tambah_kucing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -168,6 +169,28 @@ class _DetailkucingState extends State<Detailkucing> {
                             setState(() {});
                           },
                         ),
+                      ),
+                      Container(
+                        width: 110,
+                        child: OutlineButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              'Hapus seluruh data kucing',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onPressed: () async {
+                               Servicefstore.delCat(
+                                uid: user.uid,
+                               id:  widget.id
+                               );
+                              Navigator.pop(context, MaterialPageRoute(builder: (context)=>Mycatscreeb() ) );
+                            }),
                       ),
                     ],
                   ),

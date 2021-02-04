@@ -41,6 +41,11 @@ static Future<void> editCat({String uid, String id,String nama, String gambar, S
         
     });
   }
+
+  static Future<void> delCat({String uid, String id}){
+    return user.doc(uid).collection('mycat').doc(id).delete();
+  }
+
   static Future<void> addMycat({String id, String nama, String gambar, String jenis, String kelamin , int umur , int beratbadan}){
     return user.doc(id).collection('mycat').doc().set({
       "nama" : nama,
